@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pagecraft &mdash; Visual Website Builder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="src/css/app.css">
+  <link rel="stylesheet" href="src/css/canvas.css">
+</head>
+<body data-view="design">
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="logo">
+        <span class="logo-mark"></span>
+        <span class="logo-text">Pagecraft</span>
+      </div>
+      <input type="text" id="project-name" class="project-name" value="Untitled Project" spellcheck="false">
+    </div>
+    <div class="topbar-center">
+      <div class="seg">
+        <button class="seg-btn active" data-view="design"><span class="i" data-icon="pencil"></span>Design</button>
+        <button class="seg-btn" data-view="code"><span class="i" data-icon="code"></span>Code</button>
+        <button class="seg-btn" data-view="preview"><span class="i" data-icon="eye"></span>Preview</button>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <button id="btn-generate" class="ai-btn"><span class="i" data-icon="sparkles"></span>Generate</button>
+      <span class="topbar-divider"></span>
+      <button id="btn-undo" class="icon-btn" title="Undo (Ctrl+Z)"><span class="i" data-icon="undo"></span></button>
+      <button id="btn-redo" class="icon-btn" title="Redo (Ctrl+Y)"><span class="i" data-icon="redo"></span></button>
+      <span class="topbar-divider"></span>
+      <button id="btn-import" class="ghost-btn"><span class="i" data-icon="upload"></span>Import</button>
+      <button id="btn-save" class="ghost-btn"><span class="i" data-icon="save"></span>Save</button>
+      <button id="btn-export" class="primary-btn"><span class="i" data-icon="download"></span>Export</button>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <!-- LEFT: Layers (top) + Library (bottom) -->
+    <aside class="panel panel-left" id="left-panel">
+      <div class="left-section layers-section">
+        <div class="panel-header compact">
+          <h2><span class="i mr" data-icon="layers"></span>Layers</h2>
+          <button class="icon-btn xs" id="btn-collapse-layers" title="Collapse all"><span class="i" data-icon="sliders"></span></button>
+        </div>
+        <div class="layers-tree" id="layers-tree"><!-- populated --></div>
+      </div>
+      <div class="left-section library-section">
+        <div class="panel-header compact">
+          <h2><span class="i mr" data-icon="package"></span>Library</h2>
+          <div class="search-wrap">
+            <span class="i search-icon" data-icon="search"></span>
+            <input type="search" id="library-search" placeholder="Search" class="search-input has-icon">
+          </div>
+        </div>
+        <div class="library-tabs">
+          <button class="lib-tab active" data-category="sections">Sections</button>
+          <button class="lib-tab" data-category="elements">Elements</button>
+          <button class="lib-tab" data-category="layouts">Layouts</button>
+        </div>
+        <div class="library-list" id="library-list"><!-- populated --></div>
+      </div>
+    </aside>
+
+    <!-- CENTER: Canvas -->
+    <section class="panel panel-center" id="canvas-panel">
+      <div class="canvas-toolbar">
+        <div class="canvas-toolbar-left">
+          <div class="seg compact">
+            <button class="seg-btn active" data-device="desktop" title="Desktop"><span class="i" data-icon="monitor"></span></button>
+            <button class="seg-btn" data-device="tablet" title="Tablet"><span class="i" data-icon="tablet"></span></button>
+            <button class="seg-btn" data-device="mobile" title="Mobile"><span class="i" data-icon="smartphone"></span></button>
+          </div>
+        </div>
+        <div class="canvas-toolbar-center">
+          <span id="canvas-breadcrumb" class="breadcrumb">body</span>
+        </div>
+        <div class="canvas-toolbar-right">
+          <span class="zoom-label" id="zoom-label">100%</span>
+        </div>
+      </div>
+      <div class="canvas-viewport" id="canvas-viewport">
+        <div class="canvas-frame" id="canvas-frame" data-device="desktop">
+          <div class="canvas-root" id="canvas-root">
+            <div class="canvas-empty" id="canvas-empty">
+              <div class="empty-illustration">+</div>
+              <h3>Start building</h3>
+              <p>Generate a site with AI, or drag a section from the library to begin.</p>
+              <button class="ai-btn lg" data-action="generate"><span class="i" data-icon="sparkles"></span>Generate with AI</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT: Live code (read-only mirror + apply-on-edit) -->
+    <aside class="panel panel-right" id="right-panel">
+      <div class="tab-pane active" data-pane="code" id="pane-code">
+        <div class="code-tabs">
+          <button class="code-tab active" data-lang="html">HTML</button>
+          <button class="code-tab" data-lang="css">CSS</button>
+          <button class="code-tab" data-lang="js">JavaScript</button>
+        </div>
+        <div class="code-editor-wrap">
+          <textarea id="code-editor" spellcheck="false" placeholder="// Code will appear as you build"></textarea>
+        </div>
+        <div class="code-actions">
+          <button id="btn-code-apply" class="primary-btn small">Apply changes</button>
+          <button id="btn-code-revert" class="ghost-btn small">Revert</button>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Context bar (rich, built dynamically by context-bar.js) -->
+  <div class="context-bar" id="context-bar" hidden></div>
+  <!-- Popover root (dynamically positioned) -->
+  <div class="popover-root" id="popover-root"></div>
+
+  <!-- Toast notifications -->
+  <div class="toast-stack" id="toast-stack"></div>
+
+  <!-- Hidden file input for import -->
+  <input type="file" id="file-input" multiple accept=".html,.css,.js,.zip" hidden>
+
+  <!-- App entry -->
+  <!-- Inline bootstrap forces a unique module URL per page load so the
+       browser doesn't reuse a stale module cache across reloads in dev. -->
+  <script type="module">
+    import('./src/js/app.js?v=' + Date.now()).catch(e => {
+      document.body.innerHTML = `<pre style="color:#f87171;padding:24px;font-family:monospace;font-size:13px;line-height:1.6">Pagecraft failed to load:\n${e.stack || e}</pre>`;
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "pagecraft",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["serve.py"],
+      "port": 8123
+    },
+    {
+      "name": "voxa",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "5173", "--directory", "F:/Take down Shopify please/rtrd"],
+      "port": 5173
+    }
+  ]
+}

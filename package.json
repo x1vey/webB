@@ -1,0 +1,9 @@
+{
+  "name": "pagecraft",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Visual website builder — generate a landing page from a prompt, then edit by drag-and-drop. Output is plain HTML/CSS/JS.",
+  "engines": {
+    "node": ">=18"
+  }
+}

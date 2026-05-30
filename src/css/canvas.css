@@ -1,0 +1,109 @@
+/* ===== Canvas Edit Mode Styles =====
+   These styles overlay editing UI ON TOP of the user's content inside the canvas.
+   They use [data-pc-*] attributes so they never collide with user CSS. */
+
+/* Reset within canvas-root so user content renders cleanly */
+.canvas-root {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #111;
+  background: #fff;
+}
+.canvas-root * { box-sizing: border-box; }
+
+/* Default styling for empty sections so the user can see where they are */
+.canvas-root [data-pc-type="section"] {
+  position: relative;
+  min-height: 120px;
+  width: 100%;
+}
+
+.canvas-root [data-pc-type="section"]:empty::before,
+.canvas-root [data-pc-type="section"][data-pc-empty="true"]::before {
+  content: "Empty section — drop elements here";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #b0b8c4;
+  font-size: 12px;
+  pointer-events: none;
+  border: 1px dashed #d8dde6;
+  border-radius: 6px;
+  margin: 8px;
+}
+
+/* Hover outline */
+.canvas-root [data-pc-id]:hover {
+  outline: 1px solid rgba(99, 102, 241, 0.4);
+  outline-offset: -1px;
+}
+
+/* Selected outline */
+.canvas-root [data-pc-id][data-pc-selected="true"] {
+  outline: 2px solid #6366f1 !important;
+  outline-offset: -2px;
+}
+
+/* Drag target hover (highlighting a section as a drop target) */
+.canvas-root [data-pc-type="section"][data-pc-drop-target="true"] {
+  background-color: rgba(99, 102, 241, 0.06);
+  outline: 2px dashed #6366f1;
+  outline-offset: -2px;
+}
+
+/* Currently dragged element (within canvas) */
+.canvas-root [data-pc-id][data-pc-dragging="true"] {
+  opacity: 0.6;
+  cursor: grabbing !important;
+}
+
+/* In preview mode, hide all edit affordances */
+body[data-view="preview"] .canvas-root [data-pc-id]:hover {
+  outline: none;
+}
+body[data-view="preview"] .canvas-root [data-pc-type="section"]:empty::before,
+body[data-view="preview"] .canvas-root [data-pc-type="section"][data-pc-empty="true"]::before {
+  content: none;
+  display: none;
+}
+body[data-view="preview"] .canvas-root [data-pc-id][data-pc-selected="true"] {
+  outline: none !important;
+}
+
+/* Library item being dragged ghost */
+.drag-ghost {
+  position: fixed;
+  pointer-events: none;
+  background: rgba(99, 102, 241, 0.9);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  z-index: 5000;
+  font-family: -apple-system, sans-serif;
+}
+
+/* Drop indicator line (between sections) */
+.drop-indicator {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #6366f1;
+  z-index: 1000;
+  pointer-events: none;
+  border-radius: 2px;
+}
+.drop-indicator::before,
+.drop-indicator::after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #6366f1;
+  top: -3px;
+}
+.drop-indicator::before { left: 0; }
+.drop-indicator::after { right: 0; }
