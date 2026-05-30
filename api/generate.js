@@ -25,7 +25,12 @@ Requirements for "css":
 Requirements for "js":
 - Optional, vanilla JS only (no imports/frameworks). Keep it minimal (e.g. mobile nav toggle, smooth scroll).
 
-Return strictly valid, parseable JSON with all newlines and quotes inside strings properly escaped.`;
+CRITICAL JSON RULES:
+- Return ONLY the JSON object, nothing else. No markdown, no code fences, no explanation.
+- All newlines inside string values MUST be escaped as \\n
+- All double quotes inside string values MUST be escaped as \\"
+- The JSON must parse with JSON.parse() in one shot.
+- If the HTML is long, that's fine — just ensure the JSON is valid and complete.`;
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -62,7 +67,7 @@ module.exports = async function handler(req, res) {
       body: JSON.stringify({
         model,
         temperature: 0.7,
-        max_tokens: 8000,
+        max_tokens: 16000,
         response_format: { type: 'json_object' },
         messages: [
           { role: 'system', content: SYSTEM_PROMPT },
@@ -107,19 +112,51 @@ function friendly(status, detail) {
 
 function parseSiteJSON(text) {
   let t = String(text).trim();
+
+  // Strip markdown code fences (```json ... ``` or ``` ... ```)
   const fence = t.match(/```(?:json)?\s*([\s\S]*?)```/i);
   if (fence) t = fence[1].trim();
+
+  // Extract the outermost { ... } block
   const first = t.indexOf('{'), last = t.lastIndexOf('}');
   if (first !== -1 && last !== -1) t = t.slice(first, last + 1);
+
   let obj;
-  try { obj = JSON.parse(t); }
-  catch { throw new Error('The model did not return valid JSON.'); }
-  if (!obj || typeof obj.html !== 'string' || !obj.html.trim()) {
+
+  // Attempt 1: direct parse
+  try { obj = JSON.parse(t); } catch { obj = null; }
+
+  // Attempt 2: fix unescaped newlines/tabs inside string values
+  if (!obj) {
+    try {
+      const fixed = t.replace(/(?<=:[\s]*")([\s\S]*?)(?="[\s]*[,}])/g, (match) => {
+        return match.replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\t/g, '\\t');
+      });
+      obj = JSON.parse(fixed);
+    } catch { obj = null; }
+  }
+
+  // Attempt 3: manually extract each field with greedy regex
+  if (!obj) {
+    try {
+      const grab = (key) => {
+        const re = new RegExp('"' + key + '"\\s*:\\s*"([\\s\\S]*?)"\\s*(?:,\\s*"|\\s*})', 'i');
+        const m = t.match(re);
+        return m ? m[1].replace(/\\n/g, '\n').replace(/\\"/g, '"') : '';
+      };
+      obj = { name: grab('name'), html: grab('html'), css: grab('css'), js: grab('js') };
+      if (!obj.html) obj = null;
+    } catch { obj = null; }
+  }
+
+  if (!obj) throw new Error('The model did not return valid JSON. Try again or use a different prompt.');
+  if (!obj.html || (typeof obj.html === 'string' && !obj.html.trim())) {
     throw new Error('The response did not include any HTML.');
   }
+
   return {
     name: typeof obj.name === 'string' && obj.name.trim() ? obj.name.trim() : 'AI Website',
-    html: obj.html,
+    html: typeof obj.html === 'string' ? obj.html : '',
     css: typeof obj.css === 'string' ? obj.css : '',
     js:  typeof obj.js === 'string' ? obj.js : ''
   };
