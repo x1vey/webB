@@ -101,7 +101,7 @@ tabs.forEach(tab => {
   tab.addEventListener('click', () => activateTab(tab.dataset.category));
 });
 
-searchEl.addEventListener('input', () => {
+if (searchEl) searchEl.addEventListener('input', () => {
   activeQuery = searchEl.value;
   renderList();
 });

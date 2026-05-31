@@ -25,30 +25,30 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #b0b8c4;
+  color: oklch(0.68 0.022 278);
   font-size: 12px;
   pointer-events: none;
-  border: 1px dashed #d8dde6;
+  border: 1px dashed oklch(0.88 0.013 275);
   border-radius: 6px;
   margin: 8px;
 }
 
 /* Hover outline */
 .canvas-root [data-pc-id]:hover {
-  outline: 1px solid rgba(99, 102, 241, 0.4);
+  outline: 1px solid oklch(0.55 0.17 275 / 0.45);
   outline-offset: -1px;
 }
 
 /* Selected outline */
 .canvas-root [data-pc-id][data-pc-selected="true"] {
-  outline: 2px solid #6366f1 !important;
+  outline: 2px solid oklch(0.55 0.17 275) !important;
   outline-offset: -2px;
 }
 
 /* Drag target hover (highlighting a section as a drop target) */
 .canvas-root [data-pc-type="section"][data-pc-drop-target="true"] {
-  background-color: rgba(99, 102, 241, 0.06);
-  outline: 2px dashed #6366f1;
+  background-color: oklch(0.55 0.17 275 / 0.06);
+  outline: 2px dashed oklch(0.55 0.17 275);
   outline-offset: -2px;
 }
 
@@ -58,24 +58,11 @@
   cursor: grabbing !important;
 }
 
-/* In preview mode, hide all edit affordances */
-body[data-view="preview"] .canvas-root [data-pc-id]:hover {
-  outline: none;
-}
-body[data-view="preview"] .canvas-root [data-pc-type="section"]:empty::before,
-body[data-view="preview"] .canvas-root [data-pc-type="section"][data-pc-empty="true"]::before {
-  content: none;
-  display: none;
-}
-body[data-view="preview"] .canvas-root [data-pc-id][data-pc-selected="true"] {
-  outline: none !important;
-}
-
 /* Library item being dragged ghost */
 .drag-ghost {
   position: fixed;
   pointer-events: none;
-  background: rgba(99, 102, 241, 0.9);
+  background: oklch(0.55 0.17 275 / 0.9);
   color: #fff;
   padding: 6px 10px;
   border-radius: 4px;
@@ -90,7 +77,7 @@ body[data-view="preview"] .canvas-root [data-pc-id][data-pc-selected="true"] {
   left: 0;
   right: 0;
   height: 3px;
-  background: #6366f1;
+  background: oklch(0.55 0.17 275);
   z-index: 1000;
   pointer-events: none;
   border-radius: 2px;
@@ -102,8 +89,24 @@ body[data-view="preview"] .canvas-root [data-pc-id][data-pc-selected="true"] {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #6366f1;
+  background: oklch(0.55 0.17 275);
   top: -3px;
 }
 .drop-indicator::before { left: 0; }
-.drop-indicator::after { right: 0; }
+.drop-indicator::after  { right: 0; }
+
+/* Vertical insertion line for flex/grid (row) containers */
+.drop-indicator.vertical { width: 3px; }
+.drop-indicator.vertical::before { left: 50%; top: 0; transform: translateX(-50%); }
+.drop-indicator.vertical::after  { left: 50%; top: auto; bottom: 0; right: auto; transform: translateX(-50%); }
+
+/* Resize handles */
+.resize-handle {
+  background: #fff !important;
+  border: 1.5px solid oklch(0.55 0.17 275) !important;
+  border-radius: 2px !important;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.08);
+}
+
+/* While dragging a node, suppress text selection inside the canvas */
+body.pc-dragging #canvas-frame { user-select: none; cursor: grabbing; }

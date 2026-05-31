@@ -13,7 +13,7 @@ import { toast } from './toast.js';
 const fileInput = document.getElementById('file-input');
 const importBtn = document.getElementById('btn-import');
 
-importBtn.addEventListener('click', () => fileInput.click());
+if (importBtn) importBtn.addEventListener('click', () => fileInput.click());
 
 fileInput.addEventListener('change', async (e) => {
   const files = Array.from(e.target.files || []);

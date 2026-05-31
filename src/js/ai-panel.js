@@ -165,10 +165,11 @@ function close() {
 }
 
 // ---- Wiring ----
+// Legacy topbar button (may not exist in new UI — guard safely)
 const genTopBtn = document.getElementById('btn-generate');
 if (genTopBtn) genTopBtn.addEventListener('click', openPanel);
 
-// Empty-state button (the canvas re-renders, so delegate from document).
+// Empty-state button inside the canvas (canvas re-renders, so delegate from document).
 document.addEventListener('click', (e) => {
   const t = e.target.closest && e.target.closest('[data-action="generate"]');
   if (t) { e.preventDefault(); openPanel(); }

@@ -571,6 +571,7 @@ window.addEventListener('mouseup', () => {
 function updateToolbar(_el) { /* context-bar.js handles this now */ }
 
 function updateBreadcrumb(id) {
+  if (!breadcrumb) return;
   if (!id) {
     breadcrumb.textContent = 'body';
     return;

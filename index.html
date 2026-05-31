@@ -3,136 +3,245 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pagecraft &mdash; Visual Website Builder</title>
+  <title>Pagecraft &mdash; AI Landing Page Builder</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="src/css/app.css">
   <link rel="stylesheet" href="src/css/canvas.css">
 </head>
-<body data-view="design">
-  <header class="topbar">
-    <div class="topbar-left">
-      <div class="logo">
-        <span class="logo-mark"></span>
-        <span class="logo-text">Pagecraft</span>
-      </div>
-      <input type="text" id="project-name" class="project-name" value="Untitled Project" spellcheck="false">
-    </div>
-    <div class="topbar-center">
-      <div class="seg">
-        <button class="seg-btn active" data-view="design"><span class="i" data-icon="pencil"></span>Design</button>
-        <button class="seg-btn" data-view="code"><span class="i" data-icon="code"></span>Code</button>
-        <button class="seg-btn" data-view="preview"><span class="i" data-icon="eye"></span>Preview</button>
-      </div>
-    </div>
-    <div class="topbar-right">
-      <button id="btn-generate" class="ai-btn"><span class="i" data-icon="sparkles"></span>Generate</button>
-      <span class="topbar-divider"></span>
-      <button id="btn-undo" class="icon-btn" title="Undo (Ctrl+Z)"><span class="i" data-icon="undo"></span></button>
-      <button id="btn-redo" class="icon-btn" title="Redo (Ctrl+Y)"><span class="i" data-icon="redo"></span></button>
-      <span class="topbar-divider"></span>
-      <button id="btn-import" class="ghost-btn"><span class="i" data-icon="upload"></span>Import</button>
-      <button id="btn-save" class="ghost-btn"><span class="i" data-icon="save"></span>Save</button>
-      <button id="btn-export" class="primary-btn"><span class="i" data-icon="download"></span>Export</button>
-    </div>
-  </header>
+<body>
+<div id="app">
 
-  <main class="workspace">
-    <!-- LEFT: Layers (top) + Library (bottom) -->
-    <aside class="panel panel-left" id="left-panel">
-      <div class="left-section layers-section">
-        <div class="panel-header compact">
-          <h2><span class="i mr" data-icon="layers"></span>Layers</h2>
-          <button class="icon-btn xs" id="btn-collapse-layers" title="Collapse all"><span class="i" data-icon="sliders"></span></button>
-        </div>
-        <div class="layers-tree" id="layers-tree"><!-- populated --></div>
-      </div>
-      <div class="left-section library-section">
-        <div class="panel-header compact">
-          <h2><span class="i mr" data-icon="package"></span>Library</h2>
-          <div class="search-wrap">
-            <span class="i search-icon" data-icon="search"></span>
-            <input type="search" id="library-search" placeholder="Search" class="search-input has-icon">
-          </div>
-        </div>
-        <div class="library-tabs">
-          <button class="lib-tab active" data-category="sections">Sections</button>
-          <button class="lib-tab" data-category="elements">Elements</button>
-          <button class="lib-tab" data-category="layouts">Layouts</button>
-        </div>
-        <div class="library-list" id="library-list"><!-- populated --></div>
-      </div>
-    </aside>
+  <!-- ═══════════════════════════════════════════
+       SCREEN: START
+  ═══════════════════════════════════════════ -->
+  <div id="screen-start" class="screen">
+    <div class="start-grid"></div>
 
-    <!-- CENTER: Canvas -->
-    <section class="panel panel-center" id="canvas-panel">
-      <div class="canvas-toolbar">
-        <div class="canvas-toolbar-left">
-          <div class="seg compact">
-            <button class="seg-btn active" data-device="desktop" title="Desktop"><span class="i" data-icon="monitor"></span></button>
-            <button class="seg-btn" data-device="tablet" title="Tablet"><span class="i" data-icon="tablet"></span></button>
-            <button class="seg-btn" data-device="mobile" title="Mobile"><span class="i" data-icon="smartphone"></span></button>
+    <nav class="start-nav">
+      <div class="brand">
+        <span class="brand-mark">✦</span>
+        Pagecraft
+      </div>
+      <div class="start-nav-links">
+        <div class="dir-switch" id="theme-switch">
+          <span class="dot dot-coral" data-theme="coral" title="Coral"></span>
+          <span class="dot dot-indigo active" data-theme="indigo" title="Indigo"></span>
+          <span class="dot dot-rose" data-theme="rose" title="Rose"></span>
+        </div>
+        <span class="nav-link">Templates</span>
+        <span class="nav-link">Pricing</span>
+        <div class="avatar">K</div>
+      </div>
+    </nav>
+
+    <div class="start-main">
+      <span class="start-eyebrow"><span class="dotpulse"></span> AI landing page builder · live preview</span>
+
+      <h1 class="start-h1">Describe it. Watch it become a <span class="grad">landing page.</span></h1>
+
+      <p class="start-sub">Tell Pagecraft what you're building. It writes the copy, designs every section, and hands you a page you can tweak by clicking — no code required.</p>
+
+      <div class="composer" id="composer">
+        <textarea id="composer-input" rows="3" placeholder="A SaaS landing page for a project management tool aimed at remote teams…"></textarea>
+        <div class="composer-bar">
+          <div class="composer-bar-left">
+            <button class="composer-tool" type="button">📎 Attach</button>
+            <button class="composer-tool" type="button">🖼 Brand</button>
           </div>
-        </div>
-        <div class="canvas-toolbar-center">
-          <span id="canvas-breadcrumb" class="breadcrumb">body</span>
-        </div>
-        <div class="canvas-toolbar-right">
-          <span class="zoom-label" id="zoom-label">100%</span>
+          <button class="send-btn" id="composer-send" type="button" disabled title="Generate (Enter)">↑</button>
         </div>
       </div>
-      <div class="canvas-viewport" id="canvas-viewport">
-        <div class="canvas-frame" id="canvas-frame" data-device="desktop">
-          <div class="canvas-root" id="canvas-root">
-            <div class="canvas-empty" id="canvas-empty">
-              <div class="empty-illustration">+</div>
-              <h3>Start building</h3>
-              <p>Generate a site with AI, or drag a section from the library to begin.</p>
-              <button class="ai-btn lg" data-action="generate"><span class="i" data-icon="sparkles"></span>Generate with AI</button>
+
+      <div class="chips" id="example-chips"></div>
+
+      <!-- Product showcase -->
+      <div class="showcase">
+        <div class="showcase-glow"></div>
+        <div class="float-card fc-1">✦ Writing your copy<br><small>Headlines &amp; CTAs</small></div>
+        <div class="float-card fc-2">✓ Hero section added</div>
+        <div class="float-card fc-3">📐 Pricing section<br><small>3 tiers · Pro highlighted</small></div>
+        <div class="float-card fc-swatches">🎨 <i style="background:#6366f1"></i><i style="background:#ec4899"></i><i style="background:#f59e0b"></i></div>
+        <div class="browser">
+          <div class="browser-chrome">
+            <div class="lights">
+              <span style="background:#ff5f57"></span>
+              <span style="background:#febc2e"></span>
+              <span style="background:#28c840"></span>
+            </div>
+            <div class="b-url">🌐 mindly.pages.dev</div>
+          </div>
+          <div class="mini">
+            <div class="mini-hero">
+              <div class="mini-badge"></div>
+              <div class="mini-h"></div>
+              <div class="mini-p"></div>
+              <div class="mini-btns"><div class="mini-btn-p"></div><div class="mini-btn-g"></div></div>
+            </div>
+            <div class="mini-feat">
+              <div class="mini-card"></div>
+              <div class="mini-card"></div>
+              <div class="mini-card"></div>
             </div>
           </div>
         </div>
       </div>
-    </section>
 
-    <!-- RIGHT: Live code (read-only mirror + apply-on-edit) -->
-    <aside class="panel panel-right" id="right-panel">
-      <div class="tab-pane active" data-pane="code" id="pane-code">
-        <div class="code-tabs">
-          <button class="code-tab active" data-lang="html">HTML</button>
-          <button class="code-tab" data-lang="css">CSS</button>
-          <button class="code-tab" data-lang="js">JavaScript</button>
+      <!-- Templates shelf -->
+      <div class="start-shelf">
+        <div class="shelf-head">
+          <h3>Start from a template</h3>
+          <span class="seeall">Browse all →</span>
         </div>
-        <div class="code-editor-wrap">
-          <textarea id="code-editor" spellcheck="false" placeholder="// Code will appear as you build"></textarea>
+        <div class="tpl-grid" id="tpl-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN: GENERATING
+  ═══════════════════════════════════════════ -->
+  <div id="screen-generating" class="screen" hidden>
+    <div class="gen">
+      <div class="gen-panel">
+        <div class="gen-orb">✦</div>
+        <h2>Building your page…</h2>
+        <p class="gsub" id="gen-prompt"></p>
+        <div class="gen-steps" id="gen-steps"></div>
+        <div class="gen-bar"><div class="gen-bar-fill" id="gen-bar-fill"></div></div>
+      </div>
+      <div class="gen-preview" id="gen-preview">
+        <div class="shimmer-block sh-tall"></div>
+        <div class="shimmer-row">
+          <div class="shimmer-block sh-med"></div>
+          <div class="shimmer-block sh-med"></div>
+          <div class="shimmer-block sh-med"></div>
         </div>
-        <div class="code-actions">
-          <button id="btn-code-apply" class="primary-btn small">Apply changes</button>
-          <button id="btn-code-revert" class="ghost-btn small">Revert</button>
+        <div class="shimmer-block sh-short"></div>
+        <div class="shimmer-row">
+          <div class="shimmer-block sh-sm"></div>
+          <div class="shimmer-block sh-sm"></div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN: BUILDER
+  ═══════════════════════════════════════════ -->
+  <div id="screen-builder" class="screen" hidden>
+    <div class="builder">
+
+      <!-- Chat panel (left) -->
+      <div class="chat">
+        <div class="chat-top">
+          <div class="chat-top-inner">
+            <div class="chat-brand">
+              <span class="brand-mark sm">✦</span>
+              <input type="text" id="project-name" class="project-name-input" value="Untitled Project" spellcheck="false">
+            </div>
+            <div class="chat-top-actions">
+              <span class="status-dot"></span>
+              <span class="status-label">Live</span>
+            </div>
+          </div>
+        </div>
+        <div class="chat-log" id="chat-log"></div>
+        <div class="chat-input-wrap">
+          <div class="chat-input">
+            <textarea id="chat-input" rows="2" placeholder="Ask Pagecraft to change anything…"></textarea>
+            <button class="chat-send" id="chat-send" type="button" title="Send (Enter)">↑</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Preview side (right) -->
+      <div class="preview-side">
+        <div class="preview-bar">
+          <div class="pb-left">
+            <button class="icon-btn" id="btn-back" title="Back to start">←</button>
+            <div class="dir-switch" id="builder-theme-switch">
+              <span class="dot dot-coral" data-theme="coral" title="Coral"></span>
+              <span class="dot dot-indigo active" data-theme="indigo" title="Indigo"></span>
+              <span class="dot dot-rose" data-theme="rose" title="Rose"></span>
+            </div>
+          </div>
+          <div class="pb-center">
+            <div class="seg" id="device-seg">
+              <button class="seg-btn active" data-device="desktop" title="Desktop">🖥</button>
+              <button class="seg-btn" data-device="tablet" title="Tablet">⬜</button>
+              <button class="seg-btn" data-device="mobile" title="Mobile">📱</button>
+            </div>
+            <div class="url-pill">🌐 <span id="url-pill-text">project.pages.dev</span></div>
+          </div>
+          <div class="pb-right">
+            <button class="icon-btn" id="btn-undo" title="Undo (Ctrl+Z)">↶</button>
+            <button class="icon-btn" id="btn-redo" title="Redo (Ctrl+Y)">↷</button>
+            <button class="btn btn-ghost btn-sm" id="btn-add-section">+ Add section</button>
+            <button class="btn btn-primary btn-sm" id="btn-publish">🚀 Publish</button>
+          </div>
+        </div>
+
+        <div class="canvas-wrap">
+          <div class="canvas-viewport" id="canvas-viewport">
+            <div class="device edit-on" id="canvas-frame" data-device="desktop">
+              <div class="canvas-root" id="canvas-root">
+                <div class="canvas-empty" id="canvas-empty">
+                  <div class="empty-illustration">+</div>
+                  <h3>Start building</h3>
+                  <p>Generate a site with AI, or drag a section from the library to begin.</p>
+                  <button class="btn btn-primary" data-action="generate">✦ Generate with AI</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Components FAB -->
+      <button class="lib-fab" id="btn-components" type="button">⊞ Components</button>
+    </div>
+
+    <!-- Library drawer -->
+    <div class="scrim" id="lib-scrim"></div>
+    <aside class="drawer" id="lib-drawer">
+      <div class="drawer-head">
+        <h3>Components</h3>
+        <button class="icon-btn" id="btn-close-drawer" type="button">✕</button>
+      </div>
+      <div class="library-tabs">
+        <button class="lib-tab active" data-category="sections">Sections</button>
+        <button class="lib-tab" data-category="elements">Elements</button>
+        <button class="lib-tab" data-category="layouts">Layouts</button>
+      </div>
+      <div class="library-list" id="library-list"></div>
     </aside>
-  </main>
 
-  <!-- Context bar (rich, built dynamically by context-bar.js) -->
-  <div class="context-bar" id="context-bar" hidden></div>
-  <!-- Popover root (dynamically positioned) -->
-  <div class="popover-root" id="popover-root"></div>
+    <!-- Export / publish modal -->
+    <div class="modal-scrim" id="export-scrim" hidden>
+      <div class="modal export-modal" id="export-modal" role="dialog" aria-modal="true">
+        <!-- populated by export-modal.js -->
+      </div>
+    </div>
+  </div>
 
-  <!-- Toast notifications -->
-  <div class="toast-stack" id="toast-stack"></div>
+</div><!-- #app -->
 
-  <!-- Hidden file input for import -->
-  <input type="file" id="file-input" multiple accept=".html,.css,.js,.zip" hidden>
+<!-- Shared infrastructure (always in DOM) -->
+<div class="context-bar" id="context-bar" hidden></div>
+<div class="popover-root" id="popover-root"></div>
+<div class="toast-stack" id="toast-stack"></div>
+<input type="file" id="file-input" multiple accept=".html,.css,.js,.zip" hidden>
 
-  <!-- App entry -->
-  <!-- Inline bootstrap forces a unique module URL per page load so the
-       browser doesn't reuse a stale module cache across reloads in dev. -->
-  <script type="module">
-    import('./src/js/app.js?v=' + Date.now()).catch(e => {
-      document.body.innerHTML = `<pre style="color:#f87171;padding:24px;font-family:monospace;font-size:13px;line-height:1.6">Pagecraft failed to load:\n${e.stack || e}</pre>`;
-    });
-  </script>
+<!-- Hidden code editor (kept for code-editor.js) -->
+<textarea id="code-editor" spellcheck="false" hidden></textarea>
+
+<!-- App entry -->
+<script type="module">
+  import('./src/js/app.js?v=' + Date.now()).catch(e => {
+    document.body.innerHTML = `<pre style="color:#ef4444;padding:24px;font-family:monospace;font-size:13px;line-height:1.6">Pagecraft failed to load:\n${e.stack || e}</pre>`;
+  });
+</script>
 </body>
 </html>
